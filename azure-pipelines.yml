@@ -1,12 +1,20 @@
 trigger:
-- main   # or your branch name
+- main
 
 pool:
-  vmImage: 'windows-latest'   # Windows has better Chrome/Driver support
+  vmImage: 'windows-latest'
 
 steps:
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '21'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean test'
-  displayName: "Run Selenium Tests"
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/*.xml'
+
