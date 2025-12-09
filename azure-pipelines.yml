@@ -5,14 +5,19 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
-# 1️⃣ Install Java 21 (match your pom.xml)
+# 1️⃣ Install Google Chrome
+- powershell: |
+    choco install googlechrome -y
+  displayName: 'Install Google Chrome'
+
+# 2️⃣ Install Java 21
 - task: JavaToolInstaller@0
   inputs:
     versionSpec: '21'
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
 
-# 2️⃣ Run Maven Tests
+# 3️⃣ Run Maven Tests
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -23,10 +28,11 @@ steps:
     jdkVersionOption: '1.21'
     jdkArchitectureOption: 'x64'
 
-# 3️⃣ Publish Test Reports in pipeline
+# 4️⃣ Publish Reports
 - task: PublishTestResults@2
   inputs:
     testResultsFiles: '**/surefire-reports/*.xml'
     testRunTitle: 'Selenium Test Execution'
+
 
 
