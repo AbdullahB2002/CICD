@@ -1,20 +1,32 @@
 trigger:
-- main
+- main   # or your branch name
 
 pool:
   vmImage: 'windows-latest'
 
 steps:
+# 1️⃣ Install Java 21 (match your pom.xml)
 - task: JavaToolInstaller@0
   inputs:
     versionSpec: '21'
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
 
+# 2️⃣ Run Maven Tests
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean test'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.21'
+    jdkArchitectureOption: 'x64'
+
+# 3️⃣ Publish Test Reports in pipeline
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: '**/surefire-reports/*.xml'
+    testRunTitle: 'Selenium Test Execution'
+
 
