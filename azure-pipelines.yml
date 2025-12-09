@@ -1,0 +1,12 @@
+trigger:
+- main   # or your branch name
+
+pool:
+  vmImage: 'windows-latest'   # Windows has better Chrome/Driver support
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean test'
+  displayName: "Run Selenium Tests"
